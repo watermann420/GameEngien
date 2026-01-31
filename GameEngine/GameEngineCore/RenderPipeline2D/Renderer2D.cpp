@@ -2,6 +2,7 @@
 #include <vector>
 #include <memory>
 #include <string>
+#include <algorithm>
 
 Renderer2D::Renderer2D(int boxWidth, int boxHeight, COLORREF color)
     : m_boxWidth(boxWidth), m_boxHeight(boxHeight), m_color(color)
@@ -23,6 +24,42 @@ void Renderer2D::RenderToDC(HDC hdc, const RECT& area) const
     HBRUSH brush = CreateSolidBrush(m_color);
     FillRect(hdc, &box, brush);
     DeleteObject(brush);
+}
+
+void Renderer2D::RenderToBuffer(int width, int height, std::vector<uint8_t>& out) const
+{
+    // Top-down BGRA
+    out.assign(static_cast<size_t>(width) * height * 4, 255);
+
+    int centerX = width / 2;
+    int centerY = height / 2;
+
+    int left = centerX - m_boxWidth / 2;
+    int right = centerX + m_boxWidth / 2;
+    int top = centerY - m_boxHeight / 2;
+    int bottom = centerY + m_boxHeight / 2;
+
+    left = (std::max)(0, left);
+    right = (std::min)(width, right);
+    top = (std::max)(0, top);
+    bottom = (std::min)(height, bottom);
+
+    const uint8_t b = GetBValue(m_color);
+    const uint8_t g = GetGValue(m_color);
+    const uint8_t r = GetRValue(m_color);
+
+    for (int y = top; y < bottom; ++y)
+    {
+        size_t row = static_cast<size_t>(y) * width * 4;
+        for (int x = left; x < right; ++x)
+        {
+            size_t idx = row + x * 4;
+            out[idx + 0] = b;
+            out[idx + 1] = g;
+            out[idx + 2] = r;
+            out[idx + 3] = 255;
+        }
+    }
 }
 
 bool Renderer2D::RenderToBitmapFile(const wchar_t* filePath, int width, int height) const

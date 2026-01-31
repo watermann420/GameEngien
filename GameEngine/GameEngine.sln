@@ -2,7 +2,7 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "GameEngine", "GameEngine.vcxproj", "{C7F6A91E-F67F-45AB-AC44-0105E22E60B3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MusicEngine", "..\\MusicEngine\\MusicEngine.csproj", "{3DAA7AB9-AEB9-4DBC-9A58-B4CFC4F2758D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MusicEngine", "..\\..\\MusicEngine\\MusicEngine.csproj", "{3DAA7AB9-AEB9-4DBC-9A58-B4CFC4F2758D}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "AiDocs", "AiDocs", "{7A1A2F6F-EF72-4D15-92CC-260B07E76475}"
 	ProjectSection(SolutionItems) = preProject

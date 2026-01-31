@@ -1,5 +1,6 @@
 #pragma once
 #include <windows.h>
+#include <vector>
 
 // Minimal 2D renderer that can draw a centered filled rectangle
 // into any device context or offscreen bitmap.
@@ -13,6 +14,9 @@ public:
 
     // Render centered box into an existing device context and area
     void RenderToDC(HDC hdc, const RECT& area) const;
+
+    // Render into a BGRA buffer (top-down). Buffer is resized to width*height*4 bytes.
+    void RenderToBuffer(int width, int height, std::vector<uint8_t>& out) const;
 
     // Headless render: draw into an offscreen DIB and save as BMP.
     // Returns true on success.

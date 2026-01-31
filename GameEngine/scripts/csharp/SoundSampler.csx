@@ -27,8 +27,10 @@ static class SoundSampler
             // Adjust path as needed; we attempt a few common build outputs.
             string[] candidates = new[]
             {
-                "..\\MusicEngine\\bin\\Debug\\net8.0\\MusicEngine.dll",
-                "..\\MusicEngine\\bin\\Release\\net8.0\\MusicEngine.dll"
+                "..\\..\\MusicEngine\\bin\\Debug\\net10.0-windows\\MusicEngine.dll",
+                "..\\..\\MusicEngine\\bin\\Release\\net10.0-windows\\MusicEngine.dll",
+                "..\\..\\MusicEngine\\bin\\Debug\\net10.0-windows\\MusicEngine.exe",
+                "..\\..\\MusicEngine\\bin\\Release\\net10.0-windows\\MusicEngine.exe"
             };
 
             string path = Array.Find(candidates, File.Exists);

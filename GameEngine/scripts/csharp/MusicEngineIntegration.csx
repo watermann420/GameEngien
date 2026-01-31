@@ -1,7 +1,7 @@
 // scripts/csharp/MusicEngineIntegration.csx
 // Example: play a single note (C4) via MusicEngine when called.
 // Adjust the reference path to your built DLL (Debug/Release AnyCPU).
-#r "..\\MusicEngine\\bin\\Debug\\net8.0\\MusicEngine.dll"
+#r "..\\..\\..\\..\\MusicEngine\\bin\\Debug\\net10.0-windows\\MusicEngine.dll"
 
 using System;
 using MusicEngine;

@@ -1,2 +1,14 @@
-C:\Users\water\RiderProjects\GameEngine\GameEngine.cpp;C:\Users\water\RiderProjects\GameEngine\GameEngine\x64\Debug\GameEngine.obj
-C:\Users\water\RiderProjects\GameEngine\Renderer2D.cpp;C:\Users\water\RiderProjects\GameEngine\GameEngine\x64\Debug\Renderer2D.obj
+C:\Users\water\RiderProjects\GameEngien\GameEngine\GameEngineCore\GameEngine.cpp;C:\Users\water\RiderProjects\GameEngien\GameEngine\GameEngine\x64\Debug\GameEngine.obj
+C:\Users\water\RiderProjects\GameEngien\GameEngine\GameEngineCore\RenderPipeline2D\Renderer2D.cpp;C:\Users\water\RiderProjects\GameEngien\GameEngine\GameEngine\x64\Debug\Renderer2D.obj
+C:\Users\water\RiderProjects\GameEngien\GameEngine\GameEngineCore\Objects\GameObject.cpp;C:\Users\water\RiderProjects\GameEngien\GameEngine\GameEngine\x64\Debug\GameObject.obj
+C:\Users\water\RiderProjects\GameEngien\GameEngine\GameEngineCore\Objects\ObjectAPI.cpp;C:\Users\water\RiderProjects\GameEngien\GameEngine\GameEngine\x64\Debug\ObjectAPI.obj
+C:\Users\water\RiderProjects\GameEngien\GameEngine\GameEngineCore\Physics\Common\PhysicsWorld.cpp;C:\Users\water\RiderProjects\GameEngien\GameEngine\GameEngine\x64\Debug\PhysicsWorld.obj
+C:\Users\water\RiderProjects\GameEngien\GameEngine\GameEngineCore\Physics\Physics2D\PhysicsWorld2D.cpp;C:\Users\water\RiderProjects\GameEngien\GameEngine\GameEngine\x64\Debug\PhysicsWorld2D.obj
+C:\Users\water\RiderProjects\GameEngien\GameEngine\GameEngineCore\Physics\Physics2D\RigidBody2D.cpp;C:\Users\water\RiderProjects\GameEngien\GameEngine\GameEngine\x64\Debug\RigidBody2D.obj
+C:\Users\water\RiderProjects\GameEngien\GameEngine\GameEngineCore\Physics\Physics3D\PhysicsWorld3D.cpp;C:\Users\water\RiderProjects\GameEngien\GameEngine\GameEngine\x64\Debug\PhysicsWorld3D.obj
+C:\Users\water\RiderProjects\GameEngien\GameEngine\GameEngineCore\Physics\Physics3D\RigidBody3D.cpp;C:\Users\water\RiderProjects\GameEngien\GameEngine\GameEngine\x64\Debug\RigidBody3D.obj
+C:\Users\water\RiderProjects\GameEngien\GameEngine\GameEngineCore\textur\VideoRenderPipline\TextureCache.cpp;C:\Users\water\RiderProjects\GameEngien\GameEngine\GameEngine\x64\Debug\TextureCache.obj
+C:\Users\water\RiderProjects\GameEngien\GameEngine\GameEngineCore\textur\VideoRenderPipline\TexturePool.cpp;C:\Users\water\RiderProjects\GameEngien\GameEngine\GameEngine\x64\Debug\TexturePool.obj
+C:\Users\water\RiderProjects\GameEngien\GameEngine\GameEngineCore\textur\VideoRenderPipline\VideoRenderPipeline.cpp;C:\Users\water\RiderProjects\GameEngien\GameEngine\GameEngine\x64\Debug\VideoRenderPipeline.obj
+C:\Users\water\RiderProjects\GameEngien\GameEngine\GameEngineCore\textur\VideoRenderPipline\VideoTexture.cpp;C:\Users\water\RiderProjects\GameEngien\GameEngine\GameEngine\x64\Debug\VideoTexture.obj
+C:\Users\water\RiderProjects\GameEngien\GameEngine\GameEngineCore\Scripts\BlueBox2DTest.cpp;C:\Users\water\RiderProjects\GameEngien\GameEngine\GameEngine\x64\Debug\BlueBox2DTest.obj
