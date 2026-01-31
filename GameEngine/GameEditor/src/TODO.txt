@@ -1,0 +1,6 @@
+Planned implementation notes:
+- Choose UI tech: WinUI 3 (C#) or ImGui (C++) with docking.
+- File browser: root at ../EngineFiles; watch filesystem for changes (FileSystemWatcher).
+- Asset preview: ImGui + stb_image for textures; basic FBX metadata via Assimp.
+- Scene format: JSON (entities, components, references to EngineFiles paths).
+- Integrate Play button: build/run GameEngine with selected scene passed via CLI.
