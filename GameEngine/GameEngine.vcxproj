@@ -366,6 +366,8 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="GameEngineCore\Scripts\README.md" />
+    <Content Include="LICENSE" />
+    <Content Include="README.md" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
