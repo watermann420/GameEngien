@@ -7,6 +7,16 @@
 Renderer2D::Renderer2D(int boxWidth, int boxHeight, COLORREF color)
     : m_boxWidth(boxWidth), m_boxHeight(boxHeight), m_color(color)
 {
+    m_brush = CreateSolidBrush(m_color);
+}
+
+Renderer2D::~Renderer2D()
+{
+    if (m_brush)
+    {
+        DeleteObject(m_brush);
+        m_brush = nullptr;
+    }
 }
 
 void Renderer2D::RenderToDC(HDC hdc, const RECT& area) const
@@ -21,9 +31,9 @@ void Renderer2D::RenderToDC(HDC hdc, const RECT& area) const
         centerY + m_boxHeight / 2
     };
 
-    HBRUSH brush = CreateSolidBrush(m_color);
+    // Use cached brush to avoid per-frame allocation.
+    HBRUSH brush = m_brush ? m_brush : GetSysColorBrush(COLOR_WINDOWTEXT);
     FillRect(hdc, &box, brush);
-    DeleteObject(brush);
 }
 
 void Renderer2D::RenderToBuffer(int width, int height, std::vector<uint8_t>& out) const

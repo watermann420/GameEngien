@@ -1,3 +1,5 @@
+C:\Users\water\RiderProjects\GameEngien\GameEngine\GameEngineCore\Functionality\Audio\AudioMixer.cpp;C:\Users\water\RiderProjects\GameEngien\GameEngine\GameEngine\x64\Debug\AudioMixer.obj
+C:\Users\water\RiderProjects\GameEngien\GameEngine\GameEngineCore\Functionality\Audio\AudioDecoder.cpp;C:\Users\water\RiderProjects\GameEngien\GameEngine\GameEngine\x64\Debug\AudioDecoder.obj
 C:\Users\water\RiderProjects\GameEngien\GameEngine\GameEngineCore\GameEngine.cpp;C:\Users\water\RiderProjects\GameEngien\GameEngine\GameEngine\x64\Debug\GameEngine.obj
 C:\Users\water\RiderProjects\GameEngien\GameEngine\GameEngineCore\RenderPipeline2D\Renderer2D.cpp;C:\Users\water\RiderProjects\GameEngien\GameEngine\GameEngine\x64\Debug\Renderer2D.obj
 C:\Users\water\RiderProjects\GameEngien\GameEngine\GameEngineCore\Objects\GameObject.cpp;C:\Users\water\RiderProjects\GameEngien\GameEngine\GameEngine\x64\Debug\GameObject.obj
@@ -12,3 +14,6 @@ C:\Users\water\RiderProjects\GameEngien\GameEngine\GameEngineCore\textur\VideoRe
 C:\Users\water\RiderProjects\GameEngien\GameEngine\GameEngineCore\textur\VideoRenderPipline\VideoRenderPipeline.cpp;C:\Users\water\RiderProjects\GameEngien\GameEngine\GameEngine\x64\Debug\VideoRenderPipeline.obj
 C:\Users\water\RiderProjects\GameEngien\GameEngine\GameEngineCore\textur\VideoRenderPipline\VideoTexture.cpp;C:\Users\water\RiderProjects\GameEngien\GameEngine\GameEngine\x64\Debug\VideoTexture.obj
 C:\Users\water\RiderProjects\GameEngien\GameEngine\GameEngineCore\Scripts\BlueBox2DTest.cpp;C:\Users\water\RiderProjects\GameEngien\GameEngine\GameEngine\x64\Debug\BlueBox2DTest.obj
+C:\Users\water\RiderProjects\GameEngien\GameEngine\GameEngineCore\Functionality\Video\MFVideoSource.cpp;C:\Users\water\RiderProjects\GameEngien\GameEngine\GameEngine\x64\Debug\MFVideoSource.obj
+C:\Users\water\RiderProjects\GameEngien\GameEngine\GameEngineCore\Functionality\Video\VideoPlane.cpp;C:\Users\water\RiderProjects\GameEngien\GameEngine\GameEngine\x64\Debug\VideoPlane.obj
+C:\Users\water\RiderProjects\GameEngien\GameEngine\GameEngineCore\Functionality\Text\TextLabel.cpp;C:\Users\water\RiderProjects\GameEngien\GameEngine\GameEngine\x64\Debug\TextLabel.obj

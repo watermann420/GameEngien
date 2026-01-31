@@ -8,6 +8,8 @@ class Renderer2D
 {
 public:
     Renderer2D(int boxWidth, int boxHeight, COLORREF color);
+    ~Renderer2D();
+
     int BoxWidth() const { return m_boxWidth; }
     int BoxHeight() const { return m_boxHeight; }
     COLORREF Color() const { return m_color; }
@@ -26,4 +28,5 @@ private:
     int m_boxWidth;
     int m_boxHeight;
     COLORREF m_color;
+    HBRUSH m_brush{ nullptr };
 };

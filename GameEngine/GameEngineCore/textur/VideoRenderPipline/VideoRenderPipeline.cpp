@@ -106,6 +106,9 @@ void VideoRenderPipeline::BlitAllToDC(HDC hdc, const RECT& viewport)
 {
     if (m_streams.empty()) return;
 
+    // Favor speed over quality; caller can change if needed.
+    SetStretchBltMode(hdc, COLORONCOLOR);
+
     const size_t count = m_streams.size();
     const size_t cols = static_cast<size_t>(std::ceil(std::sqrt(static_cast<double>(count))));
     const size_t rows = static_cast<size_t>(std::ceil(static_cast<double>(count) / cols));
