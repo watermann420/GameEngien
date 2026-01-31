@@ -1,21 +1,110 @@
-MIT License
+# GameEngine License (MEL)
+## Honor-Based Community & Commercial Use License
 
-Copyright (c) 2026 watermann420
+Copyright (c) 2026  
+**Yannis Watermann (Watermann420) & (nullonebinary)**  
+Discord: Watermann  
+Email: musicenignebusiness@gmail.com  
 
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
+---
 
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
+## 1. Grant of Rights
 
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software") to:
+
+- use  
+- copy  
+- modify  
+- merge  
+- publish  
+
+**Restrictions:**
+
+You may **not**:
+
+- Rebrand, rename, or change the identity, name, logo, or trademark of this project.  
+- Claim this Software as your own work.  
+- Remove or modify copyright notices.  
+- Repackage, resell, sublicense, or place this project behind a paywall.  
+- Sell or monetize the core engine, editor, platform, or code.  
+- Integrate paid or restricted features directly into the core engine.  
+
+You **may**:
+
+- Build software **on top of this project**.  
+- Develop commercial tools, services, and applications using this engine.  
+- Create **paid plugins, extensions, or add-ons**, as long as the core engine remains free, open, and accessible.
+
+---
+
+## 2. Permitted Use
+
+The Software may be freely used for:
+
+- Personal and hobby projects  
+- Learning and education  
+- Research  
+- Indie and commercial games  
+- Music tools, plugins, and services  
+
+---
+
+## 3. Honor-Based Commercial Support
+
+If you or your company generate **more than USD 100,000 per year** in gross revenue using this Software or derivatives of it, you are **legally required** to:
+
+- Contact the author  
+- Provide a **yearly sponsorship of your choice**  
+
+> There is no fixed price. This system is based on **honor, fairness, and mutual respect**, and is intended to support the **development, maintenance, and open community** around the project.
+
+---
+
+## 4. Open-Source & Free Commitment
+
+- **This project will always remain free and open-source.**  
+- The **Music Engine, Editor, Code, Platform, and Brand** will **never be sold, closed, or restricted**.  
+- Our obligation is to ensure that **all users always have access** to the full engine.  
+- Any attempt to violate this commitment will be considered a license breach and **will be legally pursued**.
+
+---
+
+## 5. Branding, Plugin & Monetization Policy
+
+- All commercial monetization related to this engine must be implemented as **plugins, extensions, or external services**.  
+- Monetizing the core engine, its editor, code, or platform directly is strictly prohibited.  
+- Any paid feature must clearly state that it is **not part of the official core distribution**.  
+
+---
+
+## 6. Enforcement
+
+Any violation of this license, including unauthorized rebranding, monetization, or redistribution, will be actively investigated and legally pursued.
+
+---
+
+## 7. Community Integrity & Abuse
+
+Abusive, harmful, or fraudulent behavior may result in permanent exclusion from all official project spaces.  
+
+> This does **not** affect legal usage rights.
+
+---
+
+## 8. Open Development
+
+You are free to:
+
+- fork  
+- extend  
+- build  
+
+as long as this license remains included and respected.  
+
+> Remixing or renaming the engine itself is **not allowed**; only plugins or external add-ons may be monetized or extended.
+
+---
+
+## 9. No Warranty
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND.
