@@ -165,6 +165,13 @@
     <ClCompile Include="GameEngineCore\Functionality\Audio\AudioMixer.cpp" />
     <ClCompile Include="GameEngineCore\Functionality\Audio\AudioDecoder.cpp" />
     <ClCompile Include="GameEngineCore\Functionality\Assets\FbxModel.cpp" />
+    <ClCompile Include="GameEngineCore\App\AppState.cpp" />
+    <ClCompile Include="GameEngineCore\App\AudioPlayback.cpp" />
+    <ClCompile Include="GameEngineCore\App\VideoPlayback.cpp" />
+    <ClCompile Include="GameEngineCore\App\OverlayWindow.cpp" />
+    <ClCompile Include="GameEngineCore\App\ProjectConfig.cpp" />
+    <ClCompile Include="GameEngineCore\App\PluginManager.cpp" />
+    <ClCompile Include="GameEngineCore\App\Settings.cpp" />
     <ClCompile Include="GameEngineCore\GameEngine.cpp">
       <RuntimeLibrary>MultiThreadedDebugDll</RuntimeLibrary>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
@@ -334,6 +341,14 @@
     <ClCompile Include="GameEngineCore\Functionality\Text\TextLabel.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="GameEngineCore\App\AppState.h" />
+    <ClInclude Include="GameEngineCore\App\AudioPlayback.h" />
+    <ClInclude Include="GameEngineCore\App\VideoPlayback.h" />
+    <ClInclude Include="GameEngineCore\App\OverlayWindow.h" />
+    <ClInclude Include="GameEngineCore\App\ProjectConfig.h" />
+    <ClInclude Include="GameEngineCore\App\PluginAPI.h" />
+    <ClInclude Include="GameEngineCore\App\PluginManager.h" />
+    <ClInclude Include="GameEngineCore\App\Settings.h" />
     <ClInclude Include="GameEngineCore\Colliders\BoxCollider2D.h" />
     <ClInclude Include="GameEngineCore\Functionality\Audio\AudioMixer.h" />
     <ClInclude Include="GameEngineCore\Functionality\Audio\AudioDecoder.h" />
@@ -367,6 +382,7 @@
     <None Include="AiDocs\user-docs.md" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="GameEngineCore\App\" />
     <Folder Include="GameEngineCore\Colliders\" />
     <Folder Include="GameEngineCore\RenderPipeline2D\" />
     <Folder Include="GameEngineCore\Objects\" />

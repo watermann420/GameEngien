@@ -1,6 +1,6 @@
 # Scripts
 
-- `run_smoke_tests.cpp`: Beispiel-/Test-Entry-Point, der die Engine wie ein Nutzer verwendet. Baut/ruft `RunSmokeTests()` aus `CrossPlatform/src/TestScene.cpp` auf, deckt Physik, Audio, headless Render und Vulkan-Blit ab.
+- `run_smoke_tests.cpp`: Example/test entry point that uses the engine like a user. Calls `RunSmokeTests()` from `CrossPlatform/src/TestScene.cpp`, covering physics, audio, headless render, and Vulkan blit.
+- `run-musicengine-example.ps1`: Loads `MusicEngine.dll` (if available) and plays a test note via `OrganSynth`. Use this as a minimal integration example.
 
-Ziel: Hier können weitere Beispiel- oder Test-Szenen abgelegt werden, die zeigen, wie man die Engine-APIs nutzt (GameObjects, VideoTexture, künftiger Editor).
-
+Goal: Keep small example or test scenes here to demonstrate how to use engine APIs (GameObjects, VideoTexture, editor hooks, etc.).

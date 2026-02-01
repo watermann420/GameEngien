@@ -107,8 +107,14 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\EditorProject.cpp" />
+    <ClCompile Include="src\EditorPhysics.cpp" />
+    <ClCompile Include="src\EditorDraw.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\EditorProject.h" />
+    <ClInclude Include="src\EditorPhysics.h" />
+    <ClInclude Include="src\EditorDraw.h" />
     <None Include="README.md" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

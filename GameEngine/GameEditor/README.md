@@ -1,6 +1,6 @@
 # GameEditor (work-in-progress)
 
-Goal: Lightweight Unity-like editor for this engine—file browser, scene view, and code workspace in one app.
+Goal: Lightweight Unity-like editor for this engine -- file browser, scene view, and code workspace in one app.
 
 Planned modules
 - Core: host window, dockable panes (scene, inspector, console).
@@ -10,11 +10,15 @@ Planned modules
 - Play/Stop: run current game scene via existing GameEngine executable.
 
 Current state
-- Skeleton folders only (src/, editor/, assets/, plugins/). No code yet.
-- No build integration in the solution yet—kept separate to avoid breaking existing projects.
+- Win32 editor shell with project browser, console panel, and animated scene preview.
+- No build integration in the solution yet -- kept separate to avoid breaking existing projects.
+
+Smoke test (UI + animation)
+1) Build and run: `powershell -ExecutionPolicy Bypass -File scripts/run-gameeditor-smoke.ps1`
+2) The editor opens, plays an animated preview, then auto-closes after a few seconds.
+3) Use `--seconds=10` to keep it open longer, or run the exe without `--smoke` for normal use.
 
 Next steps
-1) Add a new project to the solution (`GameEditor.vcxproj` or C# WinUI/WPF) under `GameEditor/src/`.
-2) Wire file browser to `EngineFiles/` root; show previews for PNG/JPG and basic metadata for FBX/OBJ/GLTF.
-3) Launch GameEngine as a child process for Play mode; stream logs into the console pane.
-4) Add a minimal scene JSON format that the engine can load; serialize transforms/material refs.
+1) Wire file browser to `EngineFiles/` root; show previews for PNG/JPG and basic metadata for FBX/OBJ/GLTF.
+2) Launch GameEngine as a child process for Play mode; stream logs into the console pane.
+3) Add a minimal scene JSON format that the engine can load; serialize transforms/material refs.

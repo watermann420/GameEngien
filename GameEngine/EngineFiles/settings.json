@@ -1,0 +1,10 @@
+{
+  "keyBindings": {
+    "play": "Space",
+    "toggleConsole": "F1",
+    "rename": "F2",
+    "undo": "Ctrl+Z",
+    "redo": "Ctrl+Y",
+    "save": "Ctrl+S"
+  }
+}

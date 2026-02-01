@@ -1,1 +1,4 @@
 C:\Users\water\RiderProjects\GameEngien\GameEngine\GameEditor\src\main.cpp;C:\Users\water\RiderProjects\GameEngien\GameEngine\GameEditor\x64\Debug\main.obj
+C:\Users\water\RiderProjects\GameEngien\GameEngine\GameEditor\src\EditorProject.cpp;C:\Users\water\RiderProjects\GameEngien\GameEngine\GameEditor\x64\Debug\EditorProject.obj
+C:\Users\water\RiderProjects\GameEngien\GameEngine\GameEditor\src\EditorPhysics.cpp;C:\Users\water\RiderProjects\GameEngien\GameEngine\GameEditor\x64\Debug\EditorPhysics.obj
+C:\Users\water\RiderProjects\GameEngien\GameEngine\GameEditor\src\EditorDraw.cpp;C:\Users\water\RiderProjects\GameEngien\GameEngine\GameEditor\x64\Debug\EditorDraw.obj
