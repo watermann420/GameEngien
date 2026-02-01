@@ -1,4 +1,11 @@
+
+
+<img width="1536" height="1024" alt="image logo banner " src="https://github.com/user-attachments/assets/522b443f-ff2e-4c2e-9fe3-92b8196d42f2" />
+
+
 # GameEngine
+![Status](https://img.shields.io/badge/status-Work_in_Progress-orange)
+
 
 Lightweight C++ prototype for a Win32 overlay/renderer with cross‑platform stubs. Ships with a headless renderer, simple physics helpers, and placeholders for future MusicEngine audio integration.
 
