@@ -1,6 +1,13 @@
 #include "EditorDraw.h"
 
+#include <algorithm>
 #include <cmath>
+#ifdef min
+#undef min
+#endif
+#ifdef max
+#undef max
+#endif
 
 void DrawHeader(HDC hdc, const RECT& rect, const wchar_t* label)
 {
@@ -106,58 +113,34 @@ void DrawScenePreview(HDC hdc,
 
         if (showCenterCube)
         {
-            // 3D cube (center)
-            HBRUSH cubeBrush = CreateSolidBrush(RGB(60, 120, 200));
-            HGDIOBJ oldBrush = SelectObject(hdc, cubeBrush);
-            Vec3 a{ -0.6f, 0.0f, -0.6f };
-            Vec3 b{ 0.6f, 0.0f, -0.6f };
-            Vec3 c{ 0.6f, 0.0f, 0.6f };
-            Vec3 d{ -0.6f, 0.0f, 0.6f };
-            Vec3 a2{ -0.6f, 1.2f, -0.6f };
-            Vec3 b2{ 0.6f, 1.2f, -0.6f };
-            Vec3 c2{ 0.6f, 1.2f, 0.6f };
-            Vec3 d2{ -0.6f, 1.2f, 0.6f };
+            Vec3 center{ 0.0f, 0.0f, 0.0f };
+            float half = 0.8f;
+            HBRUSH ballBrush = CreateSolidBrush(RGB(80, 160, 240));
+            HGDIOBJ oldBrush = SelectObject(hdc, ballBrush);
+            Vec3 a{ center.x - half, center.y, center.z - half };
+            Vec3 b{ center.x + half, center.y, center.z - half };
+            Vec3 c{ center.x + half, center.y, center.z + half };
+            Vec3 d{ center.x - half, center.y, center.z + half };
             DrawQuad3D(hdc, rect, a, b, c, d, camYaw, camPitch, camX, camY, camZ);
-            DrawQuad3D(hdc, rect, a2, b2, c2, d2, camYaw, camPitch, camX, camY, camZ);
             SelectObject(hdc, oldBrush);
-            DeleteObject(cubeBrush);
-
-            HPEN cubeEdge = CreatePen(PS_SOLID, 1, RGB(120, 150, 210));
-            HGDIOBJ oldEdge = SelectObject(hdc, cubeEdge);
-            DrawLine3D(hdc, rect, a, a2, camYaw, camPitch, camX, camY, camZ);
-            DrawLine3D(hdc, rect, b, b2, camYaw, camPitch, camX, camY, camZ);
-            DrawLine3D(hdc, rect, c, c2, camYaw, camPitch, camX, camY, camZ);
-            DrawLine3D(hdc, rect, d, d2, camYaw, camPitch, camX, camY, camZ);
-            SelectObject(hdc, oldEdge);
-            DeleteObject(cubeEdge);
+            DeleteObject(ballBrush);
         }
-
-        // 2D plane element (sprite) rendered as a flat quad in 3D
-        HBRUSH spriteBrush = CreateSolidBrush(RGB(220, 200, 80));
-        HGDIOBJ oldSprite = SelectObject(hdc, spriteBrush);
-        Vec3 s1{ -1.0f, 1.5f, 2.0f };
-        Vec3 s2{ 1.0f, 1.5f, 2.0f };
-        Vec3 s3{ 1.0f, 3.0f, 2.0f };
-        Vec3 s4{ -1.0f, 3.0f, 2.0f };
-        DrawQuad3D(hdc, rect, s1, s2, s3, s4, camYaw, camPitch, camX, camY, camZ);
-        SelectObject(hdc, oldSprite);
-        DeleteObject(spriteBrush);
 
         if (showOrbiter)
         {
             double t = playing ? (GetTickCount64() / 1000.0) : 0.0;
             float orbitR = 2.4f;
-            Vec3 orb{ (float)cos(t) * orbitR, 0.6f, (float)sin(t) * orbitR };
-            POINT p{};
-            if (ProjectPoint(rect, orb, camYaw, camPitch, camX, camY, camZ, p))
-            {
-                HBRUSH orbBrush = CreateSolidBrush(RGB(120, 180, 250));
-                HGDIOBJ oldOrb = SelectObject(hdc, orbBrush);
-                int r = 5;
-                Ellipse(hdc, p.x - r, p.y - r, p.x + r, p.y + r);
-                SelectObject(hdc, oldOrb);
-                DeleteObject(orbBrush);
-            }
+            Vec3 orb{ (float)cos(t) * orbitR, 0.0f, (float)sin(t) * orbitR };
+            float half = 0.25f;
+            HBRUSH orbBrush = CreateSolidBrush(RGB(180, 210, 255));
+            HGDIOBJ oldOrb = SelectObject(hdc, orbBrush);
+            Vec3 a{ orb.x - half, orb.y, orb.z - half };
+            Vec3 b{ orb.x + half, orb.y, orb.z - half };
+            Vec3 c{ orb.x + half, orb.y, orb.z + half };
+            Vec3 d{ orb.x - half, orb.y, orb.z + half };
+            DrawQuad3D(hdc, rect, a, b, c, d, camYaw, camPitch, camX, camY, camZ);
+            SelectObject(hdc, oldOrb);
+            DeleteObject(orbBrush);
         }
         return;
     }
@@ -193,29 +176,26 @@ void DrawScenePreview(HDC hdc,
 
     if (showCenterCube)
     {
-        int boxSize = (int)(40 * zoom);
-        RECT box{ cx - boxSize, cy - boxSize, cx + boxSize, cy + boxSize };
-        HBRUSH boxBrush = CreateSolidBrush(RGB(60, 120, 200));
-        FillRect(hdc, &box, boxBrush);
-        DeleteObject(boxBrush);
+        int r = (int)(36 * zoom);
+        HBRUSH ballBrush = CreateSolidBrush(RGB(80, 160, 240));
+        HGDIOBJ oldBrush = SelectObject(hdc, ballBrush);
+        Ellipse(hdc, cx - r, cy - r, cx + r, cy + r);
+        SelectObject(hdc, oldBrush);
+        DeleteObject(ballBrush);
     }
 
     int orbitR = (int)(80 * zoom);
-    HPEN orbitPen = CreatePen(PS_SOLID, 1, RGB(80, 80, 120));
-    HGDIOBJ oldOrbit = SelectObject(hdc, orbitPen);
-    Arc(hdc, cx - orbitR, cy - orbitR, cx + orbitR, cy + orbitR, cx + orbitR, cy, cx + orbitR, cy);
-    SelectObject(hdc, oldOrbit);
-    DeleteObject(orbitPen);
 
     if (showOrbiter)
     {
         double t = playing ? (GetTickCount64() / 1000.0) : 0.0;
         int ox = cx + (int)(std::cos(t) * orbitR);
         int oy = cy + (int)(std::sin(t) * orbitR);
-        int orbSize = (int)(8 * zoom);
-        RECT orb{ ox - orbSize, oy - orbSize, ox + orbSize, oy + orbSize };
-        HBRUSH orbBrush = CreateSolidBrush(RGB(220, 200, 80));
-        FillRect(hdc, &orb, orbBrush);
+        int r = (int)(10 * zoom);
+        HBRUSH orbBrush = CreateSolidBrush(RGB(180, 210, 255));
+        HGDIOBJ oldBrush = SelectObject(hdc, orbBrush);
+        Ellipse(hdc, ox - r, oy - r, ox + r, oy + r);
+        SelectObject(hdc, oldBrush);
         DeleteObject(orbBrush);
     }
 

@@ -42,3 +42,4 @@ bool CanRedo();
 void SaveEditorState();
 bool ToggleExpanded(const fs::path& path);
 bool IsExpanded(const fs::path& path);
+void EnsureProjectLayout();

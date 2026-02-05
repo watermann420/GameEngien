@@ -3,6 +3,7 @@
 #include <fstream>
 #include <unordered_set>
 #include <algorithm>
+#include <cwctype>
 
 std::vector<FileEntry> g_files;
 int g_selectedIndex = -1;
@@ -42,6 +43,7 @@ static bool DeletePath(const fs::path& path)
 }
 
 static bool IsSubPath(const fs::path& parent, const fs::path& child);
+static void WriteAssetMeta(const fs::path& assetPath, const char* type);
 
 static bool IsParentSelected(const fs::path& path, const std::vector<fs::path>& paths)
 {
@@ -182,6 +184,7 @@ void SetProjectRoot(const fs::path& root)
     g_expanded.clear();
     if (!g_projectRoot.empty())
         g_expanded.insert(ToKey(g_projectRoot));
+    EnsureProjectLayout();
 }
 
 const fs::path& GetProjectRoot()
@@ -346,15 +349,36 @@ void RenameSelected(const std::wstring& newName)
 void ImportDropped(const std::vector<fs::path>& paths)
 {
     if (paths.empty()) return;
-    fs::path base = GetSelectedBase();
     for (const auto& p : paths)
     {
         if (!fs::exists(p)) continue;
-        fs::path dest = base / p.filename();
+        fs::path destBase = GetSelectedBase();
+        if (!g_projectRoot.empty() && !fs::is_directory(p))
+        {
+            std::wstring ext = p.extension().wstring();
+            std::transform(ext.begin(), ext.end(), ext.begin(), towlower);
+            if (ext == L".fbx" || ext == L".obj" || ext == L".blend" || ext == L".gltf" || ext == L".glb")
+                destBase = g_projectRoot / L"Assets" / L"Models";
+            else if (ext == L".png" || ext == L".jpg" || ext == L".jpeg" || ext == L".tga" || ext == L".bmp" || ext == L".dds")
+                destBase = g_projectRoot / L"Assets" / L"Textures";
+            else if (ext == L".wav" || ext == L".mp3" || ext == L".ogg")
+                destBase = g_projectRoot / L"Assets" / L"Audio";
+            else if (ext == L".cpp" || ext == L".h" || ext == L".hpp" || ext == L".c" || ext == L".cs")
+                destBase = g_projectRoot / L"Scripts";
+        }
+        fs::path dest = destBase / p.filename();
         dest = MakeUniquePath(dest);
         if (CopyPathTo(p, dest))
         {
             g_undo.push_back({ OpType::CopyPath, p, dest });
+            std::wstring ext = dest.extension().wstring();
+            std::transform(ext.begin(), ext.end(), ext.begin(), towlower);
+            if (ext == L".fbx" || ext == L".obj" || ext == L".blend" || ext == L".gltf" || ext == L".glb")
+                WriteAssetMeta(dest, "model");
+            else if (ext == L".png" || ext == L".jpg" || ext == L".jpeg" || ext == L".tga" || ext == L".bmp" || ext == L".dds")
+                WriteAssetMeta(dest, "texture");
+            else if (ext == L".wav" || ext == L".mp3" || ext == L".ogg")
+                WriteAssetMeta(dest, "audio");
         }
     }
     g_redo.clear();
@@ -517,4 +541,30 @@ void SaveEditorState()
     out << "}\n";
     out.close();
     AddLog(L"[editor] saved editor_state.json");
+}
+
+void EnsureProjectLayout()
+{
+    if (g_projectRoot.empty()) return;
+    fs::create_directories(g_projectRoot / L"Assets" / L"Models");
+    fs::create_directories(g_projectRoot / L"Assets" / L"Textures");
+    fs::create_directories(g_projectRoot / L"Assets" / L"Audio");
+    fs::create_directories(g_projectRoot / L"Scripts");
+    fs::create_directories(g_projectRoot / L"Scenes");
+}
+
+static void WriteAssetMeta(const fs::path& assetPath, const char* type)
+{
+    if (assetPath.empty()) return;
+    fs::path meta = assetPath;
+    meta += L".asset.json";
+    if (fs::exists(meta)) return;
+    std::ofstream out(meta);
+    out << "{\n";
+    out << "  \"type\": \"" << type << "\",\n";
+    if (std::string(type) == "model")
+        out << "  \"scale\": 1.0,\n";
+    out << "  \"source\": \"" << assetPath.filename().string() << "\"\n";
+    out << "}\n";
+    out.close();
 }

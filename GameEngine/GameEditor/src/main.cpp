@@ -175,6 +175,194 @@ static float g_camX = 0.0f;
 static float g_camY = 0.0f;
 static float g_camZ = -5.0f;
 
+static std::wstring GetEnvVar(const wchar_t* name)
+{
+    wchar_t* value = nullptr;
+    size_t len = 0;
+    if (_wdupenv_s(&value, &len, name) != 0 || !value)
+        return L"";
+    std::wstring out = value;
+    free(value);
+    return out;
+}
+
+static std::wstring GetEditorExecutable()
+{
+    if (!g_codeEditorPath.empty() && fs::exists(g_codeEditorPath))
+        return g_codeEditorPath;
+    for (const auto* name : { L"CODE_EDITOR_PATH", L"RIDER_PATH", L"RIDER_EXE", L"RIDER64_EXE" })
+    {
+        std::wstring candidate = GetEnvVar(name);
+        if (!candidate.empty() && fs::exists(candidate))
+            return candidate;
+    }
+    return L"";
+}
+
+static bool IsCodeFile(const fs::path& path)
+{
+    if (path.empty() || !path.has_extension())
+        return false;
+    std::wstring ext = path.extension().wstring();
+    std::transform(ext.begin(), ext.end(), ext.begin(), towlower);
+    for (const auto* codeExt : { L".cpp", L".c", L".cc", L".h", L".hpp", L".inl", L".cs", L".hlsl", L".glsl", L".shader" })
+    {
+        if (ext == codeExt)
+            return true;
+    }
+    return false;
+}
+
+static void OpenInCodeEditor(HWND hwnd, const fs::path& path)
+{
+    if (path.empty() || !fs::exists(path) || fs::is_directory(path))
+        return;
+    std::wstring editor = GetEditorExecutable();
+    if (!editor.empty())
+    {
+        std::wstring args = L"\"" + path.wstring() + L"\"";
+        HINSTANCE result = ShellExecuteW(hwnd, L"open", editor.c_str(), args.c_str(), nullptr, SW_SHOWNORMAL);
+        if ((INT_PTR)result <= 32)
+            AddLog(L"[editor] failed to open " + path.filename().wstring());
+        else
+            AddLog(L"[editor] opened " + path.filename().wstring());
+        return;
+    }
+    HINSTANCE result = ShellExecuteW(hwnd, L"open", path.wstring().c_str(), nullptr, nullptr, SW_SHOWNORMAL);
+    if ((INT_PTR)result <= 32)
+        AddLog(L"[editor] failed to open " + path.filename().wstring());
+    else
+        AddLog(L"[editor] opened " + path.filename().wstring());
+}
+
+static void SetCursorVisibility(bool visible)
+{
+    if (visible)
+    {
+        while (ShowCursor(TRUE) < 0) {}
+    }
+    else
+    {
+        while (ShowCursor(FALSE) >= 0) {}
+    }
+}
+
+static void StopMouseLook()
+{
+    if (!g_mouseLook) return;
+    g_mouseLook = false;
+    ReleaseCapture();
+    SetCursorVisibility(true);
+    ClipCursor(nullptr);
+}
+
+static void StartMouseLook(HWND hwnd, POINT pt)
+{
+    if (g_mouseLook) return;
+    g_mouseLook = true;
+    g_mouseLookLast = pt;
+    SetCapture(hwnd);
+    SetFocus(hwnd);
+    SetCursorVisibility(false);
+    RECT clip = g_sceneBodyRect;
+    POINT tl{ clip.left, clip.top };
+    POINT br{ clip.right, clip.bottom };
+    ClientToScreen(hwnd, &tl);
+    ClientToScreen(hwnd, &br);
+    clip.left = tl.x;
+    clip.top = tl.y;
+    clip.right = br.x;
+    clip.bottom = br.y;
+    g_mouseLookCenter = { (clip.left + clip.right) / 2, (clip.top + clip.bottom) / 2 };
+    ClipCursor(&clip);
+    SetCursorPos(g_mouseLookCenter.x, g_mouseLookCenter.y);
+}
+
+static fs::path GetMainScenePath()
+{
+    if (g_projectRoot.empty())
+        return fs::path();
+    fs::path scene = g_projectRoot / L"scene.json";
+    if (fs::exists(scene))
+        return scene;
+    fs::path fallback = g_projectRoot / L"Scenes" / L"main.scene.json";
+    if (fs::exists(fallback))
+        return fallback;
+    return scene;
+}
+
+static std::string ToScenePath(const fs::path& path)
+{
+    try
+    {
+        fs::path rel = fs::relative(path, g_projectRoot);
+        return rel.generic_string();
+    }
+    catch (...)
+    {
+        return path.generic_string();
+    }
+}
+
+static bool AppendEntityToScene(const fs::path& assetPath)
+{
+    if (g_projectRoot.empty() || assetPath.empty())
+        return false;
+    fs::path scenePath = GetMainScenePath();
+    if (scenePath.empty())
+        return false;
+    std::ifstream in(scenePath);
+    if (!in.is_open())
+        return false;
+    std::string text((std::istreambuf_iterator<char>(in)), std::istreambuf_iterator<char>());
+    in.close();
+
+    size_t entitiesPos = text.find("\"entities\"");
+    if (entitiesPos == std::string::npos)
+        return false;
+    size_t openPos = text.find('[', entitiesPos);
+    if (openPos == std::string::npos)
+        return false;
+    size_t closePos = text.rfind(']');
+    if (closePos == std::string::npos || closePos < openPos)
+        return false;
+
+    std::wstring extW = assetPath.extension().wstring();
+    std::transform(extW.begin(), extW.end(), extW.begin(), towlower);
+    std::string ext(extW.begin(), extW.end());
+    std::string relPath = ToScenePath(assetPath);
+    std::ostringstream entry;
+    if (ext == ".png" || ext == ".jpg" || ext == ".jpeg" || ext == ".tga" || ext == ".bmp" || ext == ".dds")
+    {
+        entry << "    { \"id\": \"sprite_" << assetPath.stem().string()
+              << "\", \"type\": \"Sprite\", \"sprite\": \"" << relPath
+              << "\", \"position\": [0, 0, 0] }";
+    }
+    else if (ext == ".fbx" || ext == ".obj" || ext == ".blend" || ext == ".gltf" || ext == ".glb")
+    {
+        entry << "    { \"id\": \"mesh_" << assetPath.stem().string()
+              << "\", \"type\": \"Mesh\", \"mesh\": \"" << relPath
+              << "\", \"position\": [0, 0, 0] }";
+    }
+    else
+    {
+        return false;
+    }
+
+    bool needsComma = text.find('{', openPos) != std::string::npos && closePos > openPos + 1;
+    std::string insert = (needsComma ? ",\n" : "\n");
+    insert += entry.str();
+    insert += "\n";
+
+    text.insert(closePos, insert);
+    std::ofstream out(scenePath, std::ios::trunc);
+    if (!out.is_open())
+        return false;
+    out << text;
+    out.close();
+    return true;
+}
+
 static float ClampFloat(float value, float lo, float hi)
 {
     return std::max(lo, std::min(value, hi));
@@ -282,7 +470,7 @@ static void BuildHierarchyList(std::vector<HierItem>& out)
             out.push_back({ g, 1, true });
             if (!IsGroupExpanded(g))
                 continue;
-            for (const auto& item : { L"Camera", L"Light", L"CenterCube", L"Orbiter" })
+            for (const auto& item : { L"Camera", L"Light", L"CenterBall", L"Orbiter" })
             {
                 if (IsHierarchyDeleted(item)) continue;
                 auto it = g_hierarchyParent.find(item);
@@ -290,7 +478,7 @@ static void BuildHierarchyList(std::vector<HierItem>& out)
                     out.push_back({ item, 2, false });
             }
         }
-        for (const auto& item : { L"Camera", L"Light", L"CenterCube", L"Orbiter" })
+        for (const auto& item : { L"Camera", L"Light", L"CenterBall", L"Orbiter" })
         {
             if (IsHierarchyDeleted(item)) continue;
             auto it = g_hierarchyParent.find(item);
@@ -770,12 +958,6 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
     {
         g_mainWnd = hwnd;
         AddLog(L"[init] GameEditor started");
-        fs::path root = fs::path("EngineFiles");
-        if (fs::exists(root))
-            AddLog(L"[workspace] EngineFiles found");
-        else
-            AddLog(L"[workspace] EngineFiles not found");
-        RefreshFiles();
         char* userProfile = nullptr;
         size_t len = 0;
         _dupenv_s(&userProfile, &len, "USERPROFILE");
@@ -787,10 +969,12 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
             SetProjectRoot(project);
         else
             SetProjectRoot(fs::path("EngineFiles"));
+        RefreshFiles();
         if (g_smokeMode)
         {
             AddLog(L"[smoke] enabled");
         }
+        g_codeEditorPath = GetEditorExecutable();
 
         const wchar_t CONSOLE_CLASS[] = L"GameEditorConsole";
         const wchar_t SETTINGS_CLASS[] = L"GameEditorSettings";
@@ -840,6 +1024,13 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
         SetTimer(hwnd, ID_NAV_TIMER, 16, nullptr);
         break;
     }
+    case WM_ACTIVATEAPP:
+        if (wParam)
+        {
+            RefreshFiles();
+            InvalidateRect(hwnd, nullptr, FALSE);
+        }
+        break;
     case WM_COMMAND:
         if (LOWORD(wParam) == ID_TOGGLE_CONSOLE)
         {
@@ -1037,10 +1228,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
     case WM_KEYDOWN:
         if (wParam == VK_ESCAPE && g_mouseLook)
         {
-            g_mouseLook = false;
-            ReleaseCapture();
-            ShowCursor(TRUE);
-            ClipCursor(nullptr);
+            StopMouseLook();
             return 0;
         }
         if (wParam == VK_F1)
@@ -1151,10 +1339,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
     case WM_KEYUP:
         if (wParam == VK_ESCAPE && g_mouseLook)
         {
-            g_mouseLook = false;
-            ReleaseCapture();
-            ShowCursor(TRUE);
-            ClipCursor(nullptr);
+            StopMouseLook();
             return 0;
         }
         break;
@@ -1220,10 +1405,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
             AddLog(g_playing ? L"[play] resumed" : L"[play] paused");
             if (g_playing && g_mouseLook)
             {
-                g_mouseLook = false;
-                ReleaseCapture();
-                ShowCursor(TRUE);
-                ClipCursor(nullptr);
+                StopMouseLook();
             }
             if (g_playing)
             {
@@ -1240,33 +1422,14 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
             g_view3D = !g_view3D;
             if (!g_view3D && g_mouseLook)
             {
-                g_mouseLook = false;
-                ReleaseCapture();
-                ShowCursor(TRUE);
-                ClipCursor(nullptr);
+                StopMouseLook();
             }
             InvalidateRect(hwnd, nullptr, FALSE);
             return 0;
         }
         if (!g_playing && g_showScene && g_view3D && RectHasArea(g_sceneBodyRect) && PtInRect(&g_sceneBodyRect, pt))
         {
-            g_mouseLook = true;
-            g_mouseLookLast = pt;
-            SetCapture(hwnd);
-            SetFocus(hwnd);
-            ShowCursor(FALSE);
-            RECT clip = g_sceneBodyRect;
-            POINT tl{ clip.left, clip.top };
-            POINT br{ clip.right, clip.bottom };
-            ClientToScreen(hwnd, &tl);
-            ClientToScreen(hwnd, &br);
-            clip.left = tl.x;
-            clip.top = tl.y;
-            clip.right = br.x;
-            clip.bottom = br.y;
-            g_mouseLookCenter = { (clip.left + clip.right) / 2, (clip.top + clip.bottom) / 2 };
-            ClipCursor(&clip);
-            SetCursorPos(g_mouseLookCenter.x, g_mouseLookCenter.y);
+            StartMouseLook(hwnd, pt);
             return 0;
         }
         if (PtInRect(&g_btnLeftCollapse, pt))
@@ -1470,7 +1633,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
                 }
                 else
                 {
-                    ShellExecuteW(hwnd, L"open", e.path.wstring().c_str(), nullptr, nullptr, SW_SHOWNORMAL);
+                    OpenInCodeEditor(hwnd, e.path);
                 }
                 InvalidateRect(hwnd, nullptr, FALSE);
             }
@@ -1498,6 +1661,8 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
     }
     case WM_MOUSEWHEEL:
     {
+        if (g_playing)
+            return 0;
         short delta = GET_WHEEL_DELTA_WPARAM(wParam);
         if (delta > 0)
             g_sceneZoom = std::min(2.5f, g_sceneZoom + 0.1f);
@@ -1842,6 +2007,21 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
             g_dragHoverIndex = -1;
             POINT pt{ GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam) };
             fs::path targetDir;
+            if (doMove && g_showScene && RectHasArea(g_sceneBodyRect) && PtInRect(&g_sceneBodyRect, pt))
+            {
+                if (g_selectedIndex >= 0 && g_selectedIndex < (int)g_files.size())
+                {
+                    const auto& e = g_files[g_selectedIndex];
+                    if (!e.isDir && AppendEntityToScene(e.path))
+                    {
+                        AddLog(L"[scene] added asset to scene");
+                        RefreshFiles();
+                        InvalidateRect(hwnd, nullptr, FALSE);
+                        return 0;
+                    }
+                }
+                doMove = false;
+            }
             if (doMove && PtInRect(&g_projectListRect, pt))
             {
                 int idx = dropIndex;
@@ -1872,6 +2052,12 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
                 else
                     MoveSelectedTo(targetDir);
             }
+            if (!doMove && g_selectedIndex >= 0 && g_selectedIndex < (int)g_files.size())
+            {
+                const auto& e = g_files[g_selectedIndex];
+                if (!e.isDir && IsCodeFile(e.path))
+                    OpenInCodeEditor(hwnd, e.path);
+            }
             InvalidateRect(hwnd, nullptr, FALSE);
             return 0;
         }
@@ -1891,6 +2077,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
         }
         break;
     case WM_CAPTURECHANGED:
+        StopMouseLook();
         g_dragFile = false;
         g_dragFileActive = false;
         g_dragHoverIndex = -1;
@@ -1900,6 +2087,9 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
         g_dragSelect = false;
         g_selectTarget = 0;
         InvalidateRect(hwnd, nullptr, FALSE);
+        break;
+    case WM_KILLFOCUS:
+        StopMouseLook();
         break;
     case WM_MOUSELEAVE:
         g_hoverMenu = -1;
@@ -2332,7 +2522,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
         if (g_showScene)
         {
             DrawHeader(mem, sceneHeader, L"");
-            bool showCenter = !IsHierarchyDeleted(L"CenterCube");
+            bool showCenter = !IsHierarchyDeleted(L"CenterBall");
             bool showOrbit = !IsHierarchyDeleted(L"Orbiter");
             DrawScenePreview(mem, sceneBody, g_playing, g_sceneZoom, g_scenePanX, g_scenePanY, g_view3D, g_camYaw, g_camPitch, g_camX, g_camY, g_camZ, showCenter, showOrbit);
             SetTextColor(mem, RGB(160, 160, 160));

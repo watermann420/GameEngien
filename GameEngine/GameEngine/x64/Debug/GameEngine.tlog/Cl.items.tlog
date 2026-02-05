@@ -1,6 +1,13 @@
 C:\Users\water\RiderProjects\GameEngien\GameEngine\GameEngineCore\Functionality\Audio\AudioMixer.cpp;C:\Users\water\RiderProjects\GameEngien\GameEngine\GameEngine\x64\Debug\AudioMixer.obj
 C:\Users\water\RiderProjects\GameEngien\GameEngine\GameEngineCore\Functionality\Audio\AudioDecoder.cpp;C:\Users\water\RiderProjects\GameEngien\GameEngine\GameEngine\x64\Debug\AudioDecoder.obj
 C:\Users\water\RiderProjects\GameEngien\GameEngine\GameEngineCore\Functionality\Assets\FbxModel.cpp;C:\Users\water\RiderProjects\GameEngien\GameEngine\GameEngine\x64\Debug\FbxModel.obj
+C:\Users\water\RiderProjects\GameEngien\GameEngine\GameEngineCore\App\AppState.cpp;C:\Users\water\RiderProjects\GameEngien\GameEngine\GameEngine\x64\Debug\AppState.obj
+C:\Users\water\RiderProjects\GameEngien\GameEngine\GameEngineCore\App\AudioPlayback.cpp;C:\Users\water\RiderProjects\GameEngien\GameEngine\GameEngine\x64\Debug\AudioPlayback.obj
+C:\Users\water\RiderProjects\GameEngien\GameEngine\GameEngineCore\App\VideoPlayback.cpp;C:\Users\water\RiderProjects\GameEngien\GameEngine\GameEngine\x64\Debug\VideoPlayback.obj
+C:\Users\water\RiderProjects\GameEngien\GameEngine\GameEngineCore\App\OverlayWindow.cpp;C:\Users\water\RiderProjects\GameEngien\GameEngine\GameEngine\x64\Debug\OverlayWindow.obj
+C:\Users\water\RiderProjects\GameEngien\GameEngine\GameEngineCore\App\ProjectConfig.cpp;C:\Users\water\RiderProjects\GameEngien\GameEngine\GameEngine\x64\Debug\ProjectConfig.obj
+C:\Users\water\RiderProjects\GameEngien\GameEngine\GameEngineCore\App\PluginManager.cpp;C:\Users\water\RiderProjects\GameEngien\GameEngine\GameEngine\x64\Debug\PluginManager.obj
+C:\Users\water\RiderProjects\GameEngien\GameEngine\GameEngineCore\App\Settings.cpp;C:\Users\water\RiderProjects\GameEngien\GameEngine\GameEngine\x64\Debug\Settings.obj
 C:\Users\water\RiderProjects\GameEngien\GameEngine\GameEngineCore\GameEngine.cpp;C:\Users\water\RiderProjects\GameEngien\GameEngine\GameEngine\x64\Debug\GameEngine.obj
 C:\Users\water\RiderProjects\GameEngien\GameEngine\GameEngineCore\RenderPipeline2D\Renderer2D.cpp;C:\Users\water\RiderProjects\GameEngien\GameEngine\GameEngine\x64\Debug\Renderer2D.obj
 C:\Users\water\RiderProjects\GameEngien\GameEngine\GameEngineCore\Objects\GameObject.cpp;C:\Users\water\RiderProjects\GameEngien\GameEngine\GameEngine\x64\Debug\GameObject.obj
